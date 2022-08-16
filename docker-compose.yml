@@ -1,0 +1,15 @@
+version: '3.8'
+services:
+  dev-postgres:
+    image: postgres:14.4-alpine
+    ports:
+      - 5434:5432
+    environment:
+      POSTGRES_USER: yanatori
+      POSTGRES_PASSWORD: yanatori
+      POSTGRES_DB: coffeefeeling
+    restart: always
+    networks:
+      - coffeefeeling
+networks:
+  coffeefeeling:

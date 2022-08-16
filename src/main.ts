@@ -12,7 +12,7 @@ async function bootstrap() {
     credentials: true,
     origin: [
       'http://localhost:3000',
-      'https://coffeefeeling-frontend.vercel.app/',
+      'https://coffeefeeling-frontend.vercel.app',
     ],
   });
   app.use(cookieParser());

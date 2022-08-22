@@ -39,7 +39,7 @@ export class CoffeeService {
     });
   }
 
-  async createTask(userId: number, dto: CreateCoffeeDto): Promise<Coffee> {
+  async createCoffee(userId: number, dto: CreateCoffeeDto): Promise<Coffee> {
     const coffee = await this.prisma.coffee.create({
       data: {
         userId,

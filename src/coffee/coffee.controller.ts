@@ -19,7 +19,6 @@ import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { UpdeteCoffeeDto } from './dto/update-coffee.dto';
 import { Coffee } from '@prisma/client';
 
-@UseGuards(AuthGuard('jwt'))
 @Controller('coffee')
 export class CoffeeController {
   constructor(private readonly coffeeService: CoffeeService) {}
@@ -42,16 +41,17 @@ export class CoffeeController {
     return this.coffeeService.getCoffeeById(req.user.id, coffeeId);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Post()
-  createTask(
+  createCoffee(
     @Req() req: Request,
     @Body() dto: CreateCoffeeDto,
   ): Promise<Coffee> {
-    return this.coffeeService.createTask(req.user.id, dto);
+    return this.coffeeService.createCoffee(req.user.id, dto);
   }
 
   @Patch(':id')
-  updateTaskById(
+  updateCoffeeById(
     @Req() req: Request,
     @Param('id', ParseIntPipe) coffeeId: number,
     @Body() dto: UpdeteCoffeeDto,
@@ -61,7 +61,7 @@ export class CoffeeController {
 
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
-  deleteTaskById(
+  deleteCoffeeById(
     @Req() req: Request,
     @Param('id', ParseIntPipe) coffeeId: number,
   ): Promise<void> {

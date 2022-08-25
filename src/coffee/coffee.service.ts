@@ -30,11 +30,13 @@ export class CoffeeService {
   }
 
   // ユーザー気分で取得
-  getFeeling(category: string): Promise<Coffee[]> {
-    console.log('category', category);
+  getFeeling(coffee: any): Promise<Coffee[]> {
+    const coffeeJson = JSON.parse(coffee);
+
     return this.prisma.coffee.findMany({
       where: {
-        category,
+        category: coffeeJson.category,
+        price: coffeeJson.price,
       },
       orderBy: {
         createdAt: 'desc',

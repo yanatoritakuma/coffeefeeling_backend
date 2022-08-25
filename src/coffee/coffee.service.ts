@@ -29,6 +29,19 @@ export class CoffeeService {
     });
   }
 
+  // ユーザー気分で取得
+  getFeeling(category: string): Promise<Coffee[]> {
+    console.log('category', category);
+    return this.prisma.coffee.findMany({
+      where: {
+        category,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+  }
+
   // 特定のユーザーが投稿した特定のデータ取得
   getCoffeeById(userId: number, coffeeId: number): Promise<Coffee> {
     return this.prisma.coffee.findFirst({

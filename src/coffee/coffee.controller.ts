@@ -28,18 +28,24 @@ export class CoffeeController {
     return this.coffeeService.getAllCoffees();
   }
 
-  @Get()
-  getCoffees(@Req() req: Request): Promise<Coffee[]> {
-    return this.coffeeService.getCoffees(req.user.id);
-  }
+  // @Get()
+  // getCoffees(@Req() req: Request): Promise<Coffee[]> {
+  //   return this.coffeeService.getCoffees(req.user.id);
+  // }
 
   @Get(':id')
-  getTaskById(
-    @Req() req: Request,
-    @Param('id', ParseIntPipe) coffeeId: number,
-  ): Promise<Coffee> {
-    return this.coffeeService.getCoffeeById(req.user.id, coffeeId);
+  getFeeling(@Param('id') id: string): Promise<Coffee[]> {
+    console.log('Get', id);
+    return this.coffeeService.getFeeling(id);
   }
+
+  // @Get(':id')
+  // getCoffeeById(
+  //   @Req() req: Request,
+  //   @Param('id', ParseIntPipe) coffeeId: number,
+  // ): Promise<Coffee> {
+  //   return this.coffeeService.getCoffeeById(req.user.id, coffeeId);
+  // }
 
   @UseGuards(AuthGuard('jwt'))
   @Post()

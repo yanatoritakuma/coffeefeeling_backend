@@ -37,6 +37,7 @@ export class CoffeeService {
       where: {
         category: coffeeJson.category,
         price: coffeeJson.price,
+        place: coffeeJson.place,
       },
       orderBy: {
         createdAt: 'desc',

@@ -35,7 +35,6 @@ export class CoffeeController {
 
   @Get(':id')
   getFeeling(@Param('id') id: any): Promise<Coffee[]> {
-    console.log('Get', JSON.parse(id));
     return this.coffeeService.getFeeling(id);
   }
 

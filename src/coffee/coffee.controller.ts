@@ -18,6 +18,7 @@ import { CoffeeService } from './coffee.service';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { UpdeteCoffeeDto } from './dto/update-coffee.dto';
 import { Coffee } from '@prisma/client';
+import { TFeeling } from 'src/types/coffee';
 
 @Controller('coffee')
 export class CoffeeController {
@@ -34,7 +35,7 @@ export class CoffeeController {
   // }
 
   @Get(':id')
-  getFeeling(@Param('id') id: any): Promise<Coffee[]> {
+  getFeeling(@Param('id') id: TFeeling): Promise<Coffee[]> {
     return this.coffeeService.getFeeling(id);
   }
 

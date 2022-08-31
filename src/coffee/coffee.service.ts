@@ -3,6 +3,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { UpdeteCoffeeDto } from './dto/update-coffee.dto';
 import { Coffee } from '@prisma/client';
+import { TFeeling } from 'src/types/coffee';
 
 @Injectable()
 export class CoffeeService {
@@ -30,8 +31,8 @@ export class CoffeeService {
   }
 
   // ユーザー気分で取得
-  getFeeling(coffee: any): Promise<Coffee[]> {
-    const coffeeJson = JSON.parse(coffee);
+  getFeeling(coffee: TFeeling): Promise<Coffee[]> {
+    const coffeeJson = JSON.parse(String(coffee));
 
     return this.prisma.coffee.findMany({
       where: {

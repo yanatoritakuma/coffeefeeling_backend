@@ -20,9 +20,6 @@ export class UpdeteCoffeeDto {
   acidity?: number;
 
   @IsOptional()
-  amount?: number;
-
-  @IsOptional()
   price?: number;
 
   @IsString()

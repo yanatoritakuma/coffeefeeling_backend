@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
-import { AuthDto } from './dto/auth.dto';
+import { AuthDto, LoginDto } from './dto/auth.dto';
 import { Csrf, Msg } from './interfaces/auth.interface';
 
 @Controller('auth')
@@ -30,7 +30,7 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Post('login')
   async login(
-    @Body() dto: AuthDto,
+    @Body() dto: LoginDto,
     @Res({ passthrough: true }) res: Response,
   ): Promise<Msg> {
     const jwt = await this.authService.login(dto);

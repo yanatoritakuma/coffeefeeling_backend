@@ -20,9 +20,6 @@ export class CreateCoffeeDto {
   acidity?: number;
 
   @IsOptional()
-  amount?: number;
-
-  @IsOptional()
   price?: number;
 
   @IsString()

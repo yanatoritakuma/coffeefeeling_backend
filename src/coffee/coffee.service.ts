@@ -3,6 +3,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { UpdeteCoffeeDto } from './dto/update-coffee.dto';
 import { Coffee } from '@prisma/client';
+import { TFeeling } from 'src/types/coffee';
 
 @Injectable()
 export class CoffeeService {
@@ -29,6 +30,22 @@ export class CoffeeService {
     });
   }
 
+  // ユーザー気分で取得
+  getFeeling(coffee: TFeeling): Promise<Coffee[]> {
+    const coffeeJson = JSON.parse(String(coffee));
+
+    return this.prisma.coffee.findMany({
+      where: {
+        category: coffeeJson.category,
+        price: coffeeJson.price,
+        place: coffeeJson.place,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+  }
+
   // 特定のユーザーが投稿した特定のデータ取得
   getCoffeeById(userId: number, coffeeId: number): Promise<Coffee> {
     return this.prisma.coffee.findFirst({
@@ -39,7 +56,7 @@ export class CoffeeService {
     });
   }
 
-  async createTask(userId: number, dto: CreateCoffeeDto): Promise<Coffee> {
+  async createCoffee(userId: number, dto: CreateCoffeeDto): Promise<Coffee> {
     const coffee = await this.prisma.coffee.create({
       data: {
         userId,

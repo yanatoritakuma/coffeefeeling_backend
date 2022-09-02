@@ -4,6 +4,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { Request } from 'express';
 import * as cookieParser from 'cookie-parser';
 import * as csurf from 'csurf';
+import * as bodyParser from 'body-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -28,6 +29,10 @@ async function bootstrap() {
       },
     }),
   );
+  // 画像をdbに保存するために設定
+  app.use(bodyParser.json({ limit: '50mb' })); // jsonをパースする際のlimitを設定
+  app.use(bodyParser.urlencoded({ limit: '50mb', extended: true })); // urlencodeされたボディをパースする際のlimitを設定
+
   await app.listen(process.env.PORT || 3005);
 }
 bootstrap();

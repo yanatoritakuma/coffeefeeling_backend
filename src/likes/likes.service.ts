@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, ForbiddenException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Likes } from '@prisma/client';
 import { CreateLikeDto } from './dto/create-like.dto';
@@ -25,5 +25,24 @@ export class LikesService {
       },
     });
     return like;
+  }
+
+  // いいね削除
+  async deleteLikeById(userId: number, coffeeId: number): Promise<void> {
+    const like = await this.prisma.likes.findMany({
+      where: {
+        coffeeId: coffeeId,
+        userId: userId,
+      },
+    });
+
+    if (!like || like[0].userId !== userId)
+      throw new ForbiddenException('No permision to delete');
+
+    await this.prisma.likes.delete({
+      where: {
+        id: like[0].id,
+      },
+    });
   }
 }

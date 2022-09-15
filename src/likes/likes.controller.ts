@@ -1,5 +1,17 @@
 import { LikesService } from './likes.service';
-import { Body, Controller, Get, Post, UseGuards, Req } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  UseGuards,
+  Req,
+  HttpCode,
+  HttpStatus,
+  Delete,
+  Param,
+  ParseIntPipe,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Likes } from '@prisma/client';
 import { CreateLikeDto } from './dto/create-like.dto';
@@ -16,10 +28,17 @@ export class LikesController {
 
   @UseGuards(AuthGuard('jwt'))
   @Post()
-  createCoffee(
-    @Req() req: Request,
-    @Body() dto: CreateLikeDto,
-  ): Promise<Likes> {
+  createLike(@Req() req: Request, @Body() dto: CreateLikeDto): Promise<Likes> {
     return this.likesService.createLike(req.user.id, dto);
+  }
+
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @UseGuards(AuthGuard('jwt'))
+  @Delete(':coffeeId')
+  deleteLikeById(
+    @Req() req: Request,
+    @Param('coffeeId', ParseIntPipe) coffeeId: number,
+  ): Promise<void> {
+    return this.likesService.deleteLikeById(req.user.id, coffeeId);
   }
 }

@@ -35,7 +35,14 @@ model Coffee {
   price Int?
   place String?
   // comment String[]
-  likes Int[]
   userId Int
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Likes {
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId Int
+  coffeeId Int
 }

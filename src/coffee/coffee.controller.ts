@@ -66,6 +66,7 @@ export class CoffeeController {
   }
 
   @HttpCode(HttpStatus.NO_CONTENT)
+  @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
   deleteCoffeeById(
     @Req() req: Request,

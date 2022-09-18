@@ -56,6 +56,7 @@ export class CoffeeController {
     return this.coffeeService.createCoffee(req.user.id, dto);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Patch(':id')
   updateCoffeeById(
     @Req() req: Request,

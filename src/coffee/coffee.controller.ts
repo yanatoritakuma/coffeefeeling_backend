@@ -56,16 +56,23 @@ export class CoffeeController {
     return this.coffeeService.createCoffee(req.user.id, dto);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Patch(':id')
   updateCoffeeById(
     @Req() req: Request,
     @Param('id', ParseIntPipe) coffeeId: number,
     @Body() dto: UpdeteCoffeeDto,
   ): Promise<Coffee> {
-    return this.coffeeService.updateCoffeeById(req.user.id, coffeeId, dto);
+    return this.coffeeService.updateCoffeeById(
+      req.user.id,
+      req.user.admin,
+      coffeeId,
+      dto,
+    );
   }
 
   @HttpCode(HttpStatus.NO_CONTENT)
+  @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
   deleteCoffeeById(
     @Req() req: Request,

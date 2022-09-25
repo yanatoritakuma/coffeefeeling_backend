@@ -37,6 +37,7 @@ model Coffee {
   // comment String[]
   userId Int
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  likes Likes[]
 }
 
 model Likes {
@@ -45,4 +46,5 @@ model Likes {
   updatedAt DateTime @updatedAt
   userId Int
   coffeeId Int
+  coffee Coffee @relation(fields: [coffeeId], references: [id], onDelete: Cascade)
 }

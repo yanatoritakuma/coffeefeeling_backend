@@ -68,6 +68,7 @@ export class CoffeeService {
 
   async updateCoffeeById(
     userId: number,
+    userAdmin: boolean,
     coffeeId: number,
     dto: UpdeteCoffeeDto,
   ): Promise<Coffee> {
@@ -77,8 +78,11 @@ export class CoffeeService {
       },
     });
 
-    if (!coffee || coffee.userId !== userId)
-      throw new ForbiddenException('No permision to update');
+    if (!userAdmin) {
+      if (!coffee || coffee.userId !== userId) {
+        throw new ForbiddenException('No permision to update');
+      }
+    }
 
     return this.prisma.coffee.update({
       where: {

@@ -7,7 +7,12 @@ import {
   Res,
   Req,
   Get,
+  Delete,
+  UseGuards,
+  Param,
+  ParseIntPipe,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
 import { AuthDto, LoginDto } from './dto/auth.dto';
@@ -57,5 +62,15 @@ export class AuthController {
     return {
       message: 'ok',
     };
+  }
+
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @UseGuards(AuthGuard('jwt'))
+  @Delete(':id')
+  deleteUserById(
+    @Req() req: Request,
+    @Param('id', ParseIntPipe) userId: number,
+  ): Promise<void> {
+    return this.authService.deleteUserById(req.user.id, userId);
   }
 }

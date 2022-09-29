@@ -67,4 +67,15 @@ export class AuthService {
       accessToken: token,
     };
   }
+
+  async deleteUserById(loginUserId: number, userId: number): Promise<void> {
+    if (loginUserId !== userId)
+      throw new ForbiddenException('No permision to delete');
+
+    await this.prisma.user.delete({
+      where: {
+        id: loginUserId,
+      },
+    });
+  }
 }

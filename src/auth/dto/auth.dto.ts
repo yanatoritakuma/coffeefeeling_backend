@@ -19,8 +19,8 @@ export class AuthDto {
   @IsString()
   name: string;
 
-  // @IsString()
-  // image?: string;
+  @IsString()
+  image?: string;
 
   @IsBoolean()
   admin: boolean;

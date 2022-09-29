@@ -22,7 +22,7 @@ export class AuthService {
           email: dto.email,
           hashedPassword: hashed,
           name: dto.name,
-          // image: dto.image,
+          image: dto.image,
           admin: dto.admin,
         },
       });

@@ -3,6 +3,7 @@ import {
   IsEmail,
   IsNotEmpty,
   IsString,
+  IsOptional,
   MinLength,
 } from 'class-validator';
 
@@ -19,6 +20,8 @@ export class AuthDto {
   @IsString()
   name: string;
 
+  @IsString()
+  @IsOptional()
   image?: string;
 
   @IsBoolean()

@@ -19,7 +19,7 @@ export class CoffeeService {
   }
 
   // 特定のユーザーが投稿したデータ取得
-  getCoffees(userId: number): Promise<Coffee[]> {
+  getCoffeeByUserId(userId: number): Promise<Coffee[]> {
     return this.prisma.coffee.findMany({
       where: {
         userId,
@@ -47,14 +47,14 @@ export class CoffeeService {
   }
 
   // 特定のユーザーが投稿した特定のデータ取得
-  getCoffeeById(userId: number, coffeeId: number): Promise<Coffee> {
-    return this.prisma.coffee.findFirst({
-      where: {
-        userId,
-        id: coffeeId,
-      },
-    });
-  }
+  // getCoffeeById(userId: number, coffeeId: number): Promise<Coffee> {
+  //   return this.prisma.coffee.findFirst({
+  //     where: {
+  //       userId,
+  //       id: coffeeId,
+  //     },
+  //   });
+  // }
 
   async createCoffee(userId: number, dto: CreateCoffeeDto): Promise<Coffee> {
     const coffee = await this.prisma.coffee.create({

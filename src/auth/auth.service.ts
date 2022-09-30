@@ -22,7 +22,7 @@ export class AuthService {
           email: dto.email,
           hashedPassword: hashed,
           name: dto.name,
-          // image: dto.image,
+          image: dto.image,
           admin: dto.admin,
         },
       });
@@ -66,5 +66,16 @@ export class AuthService {
     return {
       accessToken: token,
     };
+  }
+
+  async deleteUserById(loginUserId: number, userId: number): Promise<void> {
+    if (loginUserId !== userId)
+      throw new ForbiddenException('No permision to delete');
+
+    await this.prisma.user.delete({
+      where: {
+        id: loginUserId,
+      },
+    });
   }
 }

@@ -29,10 +29,11 @@ export class CoffeeController {
     return this.coffeeService.getAllCoffees();
   }
 
-  // @Get()
-  // getCoffees(@Req() req: Request): Promise<Coffee[]> {
-  //   return this.coffeeService.getCoffees(req.user.id);
-  // }
+  @UseGuards(AuthGuard('jwt'))
+  @Get('/userId')
+  getCoffeeByUserId(@Req() req: Request): Promise<Coffee[]> {
+    return this.coffeeService.getCoffeeByUserId(req.user.id);
+  }
 
   @Get(':id')
   getFeeling(@Param('id') id: TFeeling): Promise<Coffee[]> {

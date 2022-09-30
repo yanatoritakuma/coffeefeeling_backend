@@ -19,7 +19,6 @@ model User {
   name String?
   image String?
   admin Boolean?
-  likes Int[]
   coffee Coffee[]
 }
 

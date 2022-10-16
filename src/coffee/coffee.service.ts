@@ -12,8 +12,15 @@ export class CoffeeService {
   // 全ての投稿取得
   getAllCoffees(): Promise<Coffee[]> {
     return this.prisma.coffee.findMany({
+      include: {
+        _count: {
+          select: { likes: true },
+        },
+      },
       orderBy: {
-        createdAt: 'desc',
+        likes: {
+          _count: 'desc',
+        },
       },
     });
   }

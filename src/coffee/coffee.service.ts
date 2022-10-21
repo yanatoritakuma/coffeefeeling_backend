@@ -16,6 +16,12 @@ export class CoffeeService {
         _count: {
           select: { likes: true },
         },
+        user: {
+          select: {
+            name: true,
+            image: true,
+          },
+        },
       },
       orderBy: {
         likes: {
@@ -46,6 +52,14 @@ export class CoffeeService {
         category: coffeeJson.category,
         price: coffeeJson.price,
         place: coffeeJson.place,
+      },
+      include: {
+        user: {
+          select: {
+            name: true,
+            image: true,
+          },
+        },
       },
       orderBy: {
         createdAt: 'desc',

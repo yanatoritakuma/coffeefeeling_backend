@@ -44,14 +44,26 @@ export class CoffeeService {
   }
 
   // ユーザー気分で取得
-  getFeeling(coffee: TFeeling): Promise<Coffee[]> {
-    const coffeeJson = JSON.parse(String(coffee));
+  getFeeling(
+    category: string,
+    bitter: number,
+    acidity: number,
+    price: number,
+    place: string,
+  ): Promise<Coffee[]> {
+    const categoryJson = JSON.parse(String(category));
+    const bitterJson = JSON.parse(String(bitter));
+    const acidityJson = JSON.parse(String(acidity));
+    const priceJson = JSON.parse(String(price));
+    const placeJson = JSON.parse(String(place));
 
     return this.prisma.coffee.findMany({
       where: {
-        category: coffeeJson.category,
-        price: coffeeJson.price,
-        place: coffeeJson.place,
+        category: categoryJson,
+        // bitter: bitterJson,
+        // acidity: acidityJson,
+        price: priceJson,
+        place: placeJson,
       },
       include: {
         user: {

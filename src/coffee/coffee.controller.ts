@@ -11,6 +11,7 @@ import {
   Post,
   UseGuards,
   Req,
+  Query,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
@@ -35,9 +36,23 @@ export class CoffeeController {
     return this.coffeeService.getCoffeeByUserId(req.user.id);
   }
 
-  @Get(':id')
-  getFeeling(@Param('id') id: TFeeling): Promise<Coffee[]> {
-    return this.coffeeService.getFeeling(id);
+  @Get('/feeling')
+  getFeeling(
+    @Query('category') category: string,
+    @Query('bitter') bitter: number,
+    @Query('acidity') acidity: number,
+    @Query('price') price: number,
+    @Query('place') place: string,
+  ): Promise<Coffee[]> {
+    console.log(category);
+    console.log(bitter);
+    return this.coffeeService.getFeeling(
+      category,
+      bitter,
+      acidity,
+      price,
+      place,
+    );
   }
 
   // @Get(':id')

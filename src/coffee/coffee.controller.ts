@@ -19,7 +19,6 @@ import { CoffeeService } from './coffee.service';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { UpdeteCoffeeDto } from './dto/update-coffee.dto';
 import { Coffee } from '@prisma/client';
-import { TFeeling } from 'src/types/coffee';
 
 @Controller('coffee')
 export class CoffeeController {

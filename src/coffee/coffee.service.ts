@@ -3,7 +3,6 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { UpdeteCoffeeDto } from './dto/update-coffee.dto';
 import { Coffee } from '@prisma/client';
-import { TFeeling } from 'src/types/coffee';
 
 @Injectable()
 export class CoffeeService {
@@ -57,26 +56,18 @@ export class CoffeeService {
     const priceJson = JSON.parse(String(price));
     const placeJson = JSON.parse(String(place));
 
-    return this.prisma.coffee.findMany({
-      where: {
-        category: categoryJson,
-        // bitter: bitterJson,
-        // acidity: acidityJson,
-        price: priceJson,
-        place: placeJson,
-      },
-      include: {
-        user: {
-          select: {
-            name: true,
-            image: true,
-          },
-        },
-      },
-      orderBy: {
-        createdAt: 'desc',
-      },
-    });
+    return this.prisma.$queryRaw<any[]>`
+      select * from "Coffee"
+      where category = ${categoryJson}
+      and
+      place = ${placeJson}
+      and
+      abs(${bitterJson} - bitter) = (select min(abs(${bitterJson} - bitter))from "Coffee")
+      and
+      abs(${acidityJson} - acidity) = (select min(abs(${acidityJson} - acidity))from "Coffee")
+      and
+      abs(${priceJson} - price) = (select min(abs(${priceJson} - price))from "Coffee")
+    `;
   }
 
   // 特定のユーザーが投稿した特定のデータ取得

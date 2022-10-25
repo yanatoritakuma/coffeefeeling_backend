@@ -62,11 +62,11 @@ export class CoffeeService {
       and
       place = ${placeJson}
       and
-      abs(${bitterJson} - bitter) = (select min(abs(${bitterJson} - bitter))from "Coffee")
+      abs(bitter - ${bitterJson}) = (select min(abs(bitter - ${bitterJson}))from "Coffee")
+      or
+      abs(acidity - ${acidityJson}) = (select min(acidity - abs(${acidityJson}))from "Coffee")
       and
-      abs(${acidityJson} - acidity) = (select min(abs(${acidityJson} - acidity))from "Coffee")
-      and
-      abs(${priceJson} - price) = (select min(abs(${priceJson} - price))from "Coffee")
+      abs(price - ${priceJson}) = (select min(price - abs(${priceJson}))from "Coffee")
     `;
   }
 

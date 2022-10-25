@@ -43,8 +43,6 @@ export class CoffeeController {
     @Query('price') price: number,
     @Query('place') place: string,
   ): Promise<Coffee[]> {
-    console.log(category);
-    console.log(bitter);
     return this.coffeeService.getFeeling(
       category,
       bitter,

@@ -3,6 +3,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { UpdeteCoffeeDto } from './dto/update-coffee.dto';
 import { Coffee } from '@prisma/client';
+import { TBestCoffee } from 'src/type/typeCoffee';
 
 @Injectable()
 export class CoffeeService {
@@ -43,31 +44,43 @@ export class CoffeeService {
   }
 
   // ユーザー気分で取得
-  getFeeling(
+  async getFeeling(
     category: string,
     bitter: number,
     acidity: number,
     price: number,
     place: string,
-  ): Promise<Coffee[]> {
+  ): Promise<TBestCoffee> {
     const categoryJson = JSON.parse(String(category));
     const bitterJson = JSON.parse(String(bitter));
     const acidityJson = JSON.parse(String(acidity));
     const priceJson = JSON.parse(String(price));
     const placeJson = JSON.parse(String(place));
 
-    return this.prisma.$queryRaw<any[]>`
-      select * from "Coffee"
-      where category = ${categoryJson}
-      and
-      place = ${placeJson}
-      and
-      abs(bitter - ${bitterJson}) = (select min(abs(bitter - ${bitterJson}))from "Coffee")
-      or
-      abs(acidity - ${acidityJson}) = (select min(acidity - abs(${acidityJson}))from "Coffee")
-      and
-      abs(price - ${priceJson}) = (select min(price - abs(${priceJson}))from "Coffee")
+    const bitterBest = await this.prisma.$queryRaw<Coffee[]>`
+      SELECT * FROM "Coffee"
+      WHERE category = ${categoryJson}
+      AND price = ${priceJson}
+      AND place = ${placeJson}
+      ORDER BY abs(bitter - ${bitterJson})
+      LIMIT 3
     `;
+
+    const acidityBest = await this.prisma.$queryRaw<Coffee[]>`
+      SELECT * FROM "Coffee"
+      WHERE category = ${categoryJson}
+      AND price = ${priceJson}
+      AND place = ${placeJson}
+      ORDER BY abs(acidity - ${acidityJson})
+      LIMIT 3
+    `;
+
+    const bestCoffee = {
+      bitterBest: bitterBest,
+      acidityBes: acidityBest,
+    };
+
+    return bestCoffee;
   }
 
   // 特定のユーザーが投稿した特定のデータ取得

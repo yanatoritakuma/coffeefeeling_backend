@@ -19,6 +19,7 @@ import { CoffeeService } from './coffee.service';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { UpdeteCoffeeDto } from './dto/update-coffee.dto';
 import { Coffee } from '@prisma/client';
+import { TBestCoffee } from 'src/type/typeCoffee';
 
 @Controller('coffee')
 export class CoffeeController {
@@ -42,7 +43,7 @@ export class CoffeeController {
     @Query('acidity') acidity: number,
     @Query('price') price: number,
     @Query('place') place: string,
-  ): Promise<Coffee[]> {
+  ): Promise<TBestCoffee> {
     return this.coffeeService.getFeeling(
       category,
       bitter,

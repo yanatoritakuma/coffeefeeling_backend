@@ -77,7 +77,7 @@ export class CoffeeService {
 
     const bestCoffee = {
       bitterBest: bitterBest,
-      acidityBes: acidityBest,
+      acidityBest: acidityBest,
     };
 
     return bestCoffee;

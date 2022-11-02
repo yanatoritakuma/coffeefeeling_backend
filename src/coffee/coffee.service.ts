@@ -58,7 +58,10 @@ export class CoffeeService {
     const placeJson = JSON.parse(String(place));
 
     const bitterBest = await this.prisma.$queryRaw<Coffee[]>`
-      SELECT * FROM "Coffee"
+      SELECT "Coffee".*, "User"."name" AS user_name, "User"."image" AS user_image
+      FROM "Coffee"
+      JOIN "User"
+      ON "userId" = "User"."id"
       WHERE category = ${categoryJson}
       AND price = ${priceJson}
       AND place = ${placeJson}
@@ -67,7 +70,10 @@ export class CoffeeService {
     `;
 
     const acidityBest = await this.prisma.$queryRaw<Coffee[]>`
-      SELECT * FROM "Coffee"
+      SELECT "Coffee".*, "User"."name" AS user_name, "User"."image" AS user_image
+      FROM "Coffee"
+      JOIN "User"
+      ON "userId" = "User"."id"
       WHERE category = ${categoryJson}
       AND price = ${priceJson}
       AND place = ${placeJson}

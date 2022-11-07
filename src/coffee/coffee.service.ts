@@ -58,33 +58,25 @@ export class CoffeeService {
     const placeJson = JSON.parse(String(place));
 
     const bitterBest = await this.prisma.$queryRaw<Coffee[]>`
-      SELECT "Coffee".*, "User"."name" AS user_name, "User"."image" AS user_image,
-      ARRAY_AGG("Likes"."userId") AS like_user_id
+      SELECT "Coffee".*, "User"."name" AS user_name, "User"."image" AS user_image
       FROM "Coffee"
       JOIN "User"
       ON "userId" = "User"."id"
-      JOIN "Likes"
-      ON "Coffee"."id" = "Likes"."coffeeId"
       WHERE category = ${categoryJson}
       AND price = ${priceJson}
       AND place = ${placeJson}
-      GROUP BY "Coffee"."id", "User"."name", "User"."image"
       ORDER BY abs(bitter - ${bitterJson})
       LIMIT 3
     `;
 
     const acidityBest = await this.prisma.$queryRaw<Coffee[]>`
-      SELECT "Coffee".*, "User"."name" AS user_name, "User"."image" AS user_image,
-      ARRAY_AGG("Likes"."userId") AS like_user_id
+      SELECT "Coffee".*, "User"."name" AS user_name, "User"."image" AS user_image
       FROM "Coffee"
       JOIN "User"
       ON "userId" = "User"."id"
-      JOIN "Likes"
-      ON "Coffee"."id" = "Likes"."coffeeId"
       WHERE category = ${categoryJson}
       AND price = ${priceJson}
       AND place = ${placeJson}
-      GROUP BY "Coffee"."id", "User"."name", "User"."image"
       ORDER BY abs(acidity - ${acidityJson})
       LIMIT 3
     `;

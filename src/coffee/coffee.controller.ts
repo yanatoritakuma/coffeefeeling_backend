@@ -53,14 +53,6 @@ export class CoffeeController {
     );
   }
 
-  // @Get(':id')
-  // getCoffeeById(
-  //   @Req() req: Request,
-  //   @Param('id', ParseIntPipe) coffeeId: number,
-  // ): Promise<Coffee> {
-  //   return this.coffeeService.getCoffeeById(req.user.id, coffeeId);
-  // }
-
   @UseGuards(AuthGuard('jwt'))
   @Post()
   createCoffee(

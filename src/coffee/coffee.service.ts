@@ -58,25 +58,33 @@ export class CoffeeService {
     const placeJson = JSON.parse(String(place));
 
     const bitterBest = await this.prisma.$queryRaw<Coffee[]>`
-      SELECT "Coffee".*, "User"."name" AS user_name, "User"."image" AS user_image
+      SELECT "Coffee".*, "User"."name" AS user_name, "User"."image" AS user_image,
+      ARRAY_AGG("Likes"."userId") AS like_user_id
       FROM "Coffee"
       JOIN "User"
       ON "userId" = "User"."id"
+      JOIN "Likes"
+      ON "Coffee"."id" = "Likes"."coffeeId"
       WHERE category = ${categoryJson}
       AND price = ${priceJson}
       AND place = ${placeJson}
+      GROUP BY "Coffee"."id", "User"."name", "User"."image"
       ORDER BY abs(bitter - ${bitterJson})
       LIMIT 3
     `;
 
     const acidityBest = await this.prisma.$queryRaw<Coffee[]>`
-      SELECT "Coffee".*, "User"."name" AS user_name, "User"."image" AS user_image
+      SELECT "Coffee".*, "User"."name" AS user_name, "User"."image" AS user_image,
+      ARRAY_AGG("Likes"."userId") AS like_user_id
       FROM "Coffee"
       JOIN "User"
       ON "userId" = "User"."id"
+      JOIN "Likes"
+      ON "Coffee"."id" = "Likes"."coffeeId"
       WHERE category = ${categoryJson}
       AND price = ${priceJson}
       AND place = ${placeJson}
+      GROUP BY "Coffee"."id", "User"."name", "User"."image"
       ORDER BY abs(acidity - ${acidityJson})
       LIMIT 3
     `;
@@ -88,16 +96,6 @@ export class CoffeeService {
 
     return bestCoffee;
   }
-
-  // 特定のユーザーが投稿した特定のデータ取得
-  // getCoffeeById(userId: number, coffeeId: number): Promise<Coffee> {
-  //   return this.prisma.coffee.findFirst({
-  //     where: {
-  //       userId,
-  //       id: coffeeId,
-  //     },
-  //   });
-  // }
 
   async createCoffee(userId: number, dto: CreateCoffeeDto): Promise<Coffee> {
     const coffee = await this.prisma.coffee.create({

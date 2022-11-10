@@ -11,6 +11,7 @@ import {
   Post,
   UseGuards,
   Req,
+  Query,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
@@ -18,7 +19,7 @@ import { CoffeeService } from './coffee.service';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { UpdeteCoffeeDto } from './dto/update-coffee.dto';
 import { Coffee } from '@prisma/client';
-import { TFeeling } from 'src/types/coffee';
+import { TBestCoffee } from 'src/type/typeCoffee';
 
 @Controller('coffee')
 export class CoffeeController {
@@ -35,18 +36,22 @@ export class CoffeeController {
     return this.coffeeService.getCoffeeByUserId(req.user.id);
   }
 
-  @Get(':id')
-  getFeeling(@Param('id') id: TFeeling): Promise<Coffee[]> {
-    return this.coffeeService.getFeeling(id);
+  @Get('/feeling')
+  getFeeling(
+    @Query('category') category: string,
+    @Query('bitter') bitter: number,
+    @Query('acidity') acidity: number,
+    @Query('price') price: number,
+    @Query('place') place: string,
+  ): Promise<TBestCoffee> {
+    return this.coffeeService.getFeeling(
+      category,
+      bitter,
+      acidity,
+      price,
+      place,
+    );
   }
-
-  // @Get(':id')
-  // getCoffeeById(
-  //   @Req() req: Request,
-  //   @Param('id', ParseIntPipe) coffeeId: number,
-  // ): Promise<Coffee> {
-  //   return this.coffeeService.getCoffeeById(req.user.id, coffeeId);
-  // }
 
   @UseGuards(AuthGuard('jwt'))
   @Post()

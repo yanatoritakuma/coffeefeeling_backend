@@ -37,6 +37,14 @@ export class CoffeeService {
       where: {
         userId,
       },
+      include: {
+        user: {
+          select: {
+            name: true,
+            image: true,
+          },
+        },
+      },
       orderBy: {
         createdAt: 'desc',
       },

@@ -16,6 +16,33 @@ export class LikesService {
     });
   }
 
+  getCoffeeIdLikes(
+    coffeeId1: number,
+    coffeeId2: number,
+    coffeeId3: number,
+    coffeeId4: number,
+    coffeeId5: number,
+    coffeeId6: number,
+  ): Promise<Likes[]> {
+    return this.prisma.likes.findMany({
+      where: {
+        coffeeId: {
+          in: [
+            Number(coffeeId1),
+            Number(coffeeId2),
+            Number(coffeeId3),
+            Number(coffeeId4),
+            Number(coffeeId5),
+            Number(coffeeId6),
+          ],
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+  }
+
   // ログインしているユーザーのいいね取得
   getLoginLikes(userId: number): Promise<Likes[]> {
     return this.prisma.likes.findMany({

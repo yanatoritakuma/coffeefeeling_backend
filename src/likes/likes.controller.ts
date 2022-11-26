@@ -35,6 +35,10 @@ export class LikesController {
     @Query('coffeeId4') coffeeId4: number,
     @Query('coffeeId5') coffeeId5: number,
     @Query('coffeeId6') coffeeId6: number,
+    @Query('coffeeId7') coffeeId7: number,
+    @Query('coffeeId8') coffeeId8: number,
+    @Query('coffeeId9') coffeeId9: number,
+    @Query('coffeeId10') coffeeId10: number,
   ): Promise<Likes[]> {
     return this.likesService.getCoffeeIdLikes(
       coffeeId1,
@@ -43,6 +47,10 @@ export class LikesController {
       coffeeId4,
       coffeeId5,
       coffeeId6,
+      coffeeId7,
+      coffeeId8,
+      coffeeId9,
+      coffeeId10,
     );
   }
 

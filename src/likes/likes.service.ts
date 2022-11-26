@@ -23,6 +23,10 @@ export class LikesService {
     coffeeId4: number,
     coffeeId5: number,
     coffeeId6: number,
+    coffeeId7: number,
+    coffeeId8: number,
+    coffeeId9: number,
+    coffeeId10: number,
   ): Promise<Likes[]> {
     return this.prisma.likes.findMany({
       where: {
@@ -34,6 +38,10 @@ export class LikesService {
             Number(coffeeId4),
             Number(coffeeId5),
             Number(coffeeId6),
+            Number(coffeeId7),
+            Number(coffeeId8),
+            Number(coffeeId9),
+            Number(coffeeId10),
           ],
         },
       },

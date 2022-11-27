@@ -33,6 +33,7 @@ export class CoffeeController {
   @UseGuards(AuthGuard('jwt'))
   @Get('/userId')
   getCoffeeByUserId(@Req() req: Request): Promise<Coffee[]> {
+    console.log('req.user.id', req.user.id);
     return this.coffeeService.getCoffeeByUserId(req.user.id);
   }
 
@@ -84,6 +85,10 @@ export class CoffeeController {
     @Req() req: Request,
     @Param('id', ParseIntPipe) coffeeId: number,
   ): Promise<void> {
-    return this.coffeeService.deleteCoffeeById(req.user.id, coffeeId);
+    return this.coffeeService.deleteCoffeeById(
+      req.user.id,
+      req.user.admin,
+      coffeeId,
+    );
   }
 }

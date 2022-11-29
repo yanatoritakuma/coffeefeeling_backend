@@ -84,6 +84,10 @@ export class CoffeeController {
     @Req() req: Request,
     @Param('id', ParseIntPipe) coffeeId: number,
   ): Promise<void> {
-    return this.coffeeService.deleteCoffeeById(req.user.id, coffeeId);
+    return this.coffeeService.deleteCoffeeById(
+      req.user.id,
+      coffeeId,
+      req.user.admin,
+    );
   }
 }

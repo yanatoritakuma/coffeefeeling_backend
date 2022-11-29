@@ -143,15 +143,21 @@ export class CoffeeService {
     });
   }
 
-  async deleteCoffeeById(userId: number, coffeeId: number): Promise<void> {
+  async deleteCoffeeById(
+    userId: number,
+    coffeeId: number,
+    userAdmin: boolean,
+  ): Promise<void> {
     const coffee = await this.prisma.coffee.findUnique({
       where: {
         id: coffeeId,
       },
     });
 
-    if (!coffee || coffee.userId !== userId)
-      throw new ForbiddenException('No permision to delete');
+    if (!userAdmin) {
+      if (!coffee || coffee.userId !== userId)
+        throw new ForbiddenException('No permision to delete');
+    }
 
     await this.prisma.coffee.delete({
       where: {

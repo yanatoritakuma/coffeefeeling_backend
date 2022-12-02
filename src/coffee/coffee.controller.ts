@@ -53,6 +53,11 @@ export class CoffeeController {
     );
   }
 
+  @Get('/likeRankingCoffees')
+  getLikeRankingCoffees(): Promise<Coffee[]> {
+    return this.coffeeService.getLikeRankingCoffees();
+  }
+
   @UseGuards(AuthGuard('jwt'))
   @Post()
   createCoffee(

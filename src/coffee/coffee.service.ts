@@ -105,6 +105,29 @@ export class CoffeeService {
     return bestCoffee;
   }
 
+  // いいねTOP10のコーヒ取得
+  getLikeRankingCoffees(): Promise<Coffee[]> {
+    return this.prisma.coffee.findMany({
+      include: {
+        _count: {
+          select: { likes: true },
+        },
+        user: {
+          select: {
+            name: true,
+            image: true,
+          },
+        },
+      },
+      orderBy: {
+        likes: {
+          _count: 'desc',
+        },
+      },
+      take: 10,
+    });
+  }
+
   async createCoffee(userId: number, dto: CreateCoffeeDto): Promise<Coffee> {
     const coffee = await this.prisma.coffee.create({
       data: {

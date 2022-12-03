@@ -20,6 +20,7 @@ model User {
   image String?
   admin Boolean?
   coffee Coffee[]
+  likes Likes[]
 }
 
 model Coffee {
@@ -46,4 +47,5 @@ model Likes {
   userId Int
   coffeeId Int
   coffee Coffee @relation(fields: [coffeeId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

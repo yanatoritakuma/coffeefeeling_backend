@@ -169,6 +169,17 @@ export class CoffeeService {
       where: {
         id: coffeeId,
       },
+      include: {
+        user: {
+          select: {
+            name: true,
+            image: true,
+            _count: {
+              select: { coffee: true },
+            },
+          },
+        },
+      },
       data: {
         ...dto,
       },

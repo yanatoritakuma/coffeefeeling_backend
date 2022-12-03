@@ -32,7 +32,11 @@ export class CoffeeService {
   }
 
   // 特定のユーザーが投稿したデータ取得
-  getCoffeeByUserId(userId: number): Promise<Coffee[]> {
+  getCoffeeByUserId(
+    userId: number,
+    skipPage: number,
+    takePage: number,
+  ): Promise<Coffee[]> {
     return this.prisma.coffee.findMany({
       where: {
         userId,
@@ -42,12 +46,17 @@ export class CoffeeService {
           select: {
             name: true,
             image: true,
+            _count: {
+              select: { coffee: true },
+            },
           },
         },
       },
       orderBy: {
         createdAt: 'desc',
       },
+      skip: Number(skipPage),
+      take: Number(takePage),
     });
   }
 

@@ -56,8 +56,12 @@ export class LikesController {
 
   @UseGuards(AuthGuard('jwt'))
   @Get('/login')
-  getLoginLikes(@Req() req: Request): Promise<Likes[]> {
-    return this.likesService.getLoginLikes(req.user.id);
+  getLoginLikes(
+    @Req() req: Request,
+    @Query('skipPage') skipPage: number,
+    @Query('takePage') takePage: number,
+  ): Promise<Likes[]> {
+    return this.likesService.getLoginLikes(req.user.id, skipPage, takePage);
   }
 
   @UseGuards(AuthGuard('jwt'))

@@ -53,7 +53,11 @@ export class LikesService {
   }
 
   // ログインしているユーザーのいいね取得
-  getLoginLikes(userId: number): Promise<Likes[]> {
+  getLoginLikes(
+    userId: number,
+    skipPage: number,
+    takePage: number,
+  ): Promise<Likes[]> {
     return this.prisma.likes.findMany({
       include: {
         coffee: true,
@@ -61,6 +65,9 @@ export class LikesService {
           select: {
             name: true,
             image: true,
+            _count: {
+              select: { likes: true },
+            },
           },
         },
       },
@@ -70,8 +77,8 @@ export class LikesService {
       orderBy: {
         createdAt: 'desc',
       },
-      skip: 0,
-      take: 10,
+      skip: Number(skipPage),
+      take: Number(takePage),
     });
   }
 

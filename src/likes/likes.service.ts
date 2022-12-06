@@ -60,11 +60,18 @@ export class LikesService {
   ): Promise<Likes[]> {
     return this.prisma.likes.findMany({
       include: {
-        coffee: true,
+        coffee: {
+          include: {
+            user: {
+              select: {
+                name: true,
+                image: true,
+              },
+            },
+          },
+        },
         user: {
           select: {
-            name: true,
-            image: true,
             _count: {
               select: { likes: true },
             },

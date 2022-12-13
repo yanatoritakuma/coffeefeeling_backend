@@ -51,6 +51,11 @@ export class CoffeeService {
             },
           },
         },
+        likes: {
+          select: {
+            userId: true,
+          },
+        },
       },
       orderBy: {
         createdAt: 'desc',

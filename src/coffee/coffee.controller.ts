@@ -44,6 +44,20 @@ export class CoffeeController {
     );
   }
 
+  @UseGuards(AuthGuard('jwt'))
+  @Get('/likeUserId')
+  getCoffeeByLikeUserId(
+    @Req() req: Request,
+    @Query('skipPage') skipPage: number,
+    @Query('takePage') takePage: number,
+  ): Promise<Coffee[]> {
+    return this.coffeeService.getCoffeeByLikeUserId(
+      req.user.id,
+      skipPage,
+      takePage,
+    );
+  }
+
   @Get('/feeling')
   getFeeling(
     @Query('category') category: string,

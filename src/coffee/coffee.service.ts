@@ -47,7 +47,45 @@ export class CoffeeService {
             name: true,
             image: true,
             _count: {
-              select: { coffee: true },
+              select: { coffee: true, likes: true },
+            },
+          },
+        },
+        likes: {
+          select: {
+            userId: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      skip: Number(skipPage),
+      take: Number(takePage),
+    });
+  }
+
+  // 特定のユーザーがいいねしたコーヒー取得
+  getCoffeeByLikeUserId(
+    userId: number,
+    skipPage: number,
+    takePage: number,
+  ): Promise<Coffee[]> {
+    return this.prisma.coffee.findMany({
+      where: {
+        likes: {
+          some: {
+            userId: userId,
+          },
+        },
+      },
+      include: {
+        user: {
+          select: {
+            name: true,
+            image: true,
+            _count: {
+              select: { coffee: true, likes: true },
             },
           },
         },

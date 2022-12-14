@@ -27,43 +27,6 @@ export class LikesController {
     return this.likesService.getAllLikes();
   }
 
-  @Get('/coffeeIds')
-  getCoffeeIdLikes(
-    @Query('coffeeId1') coffeeId1: number,
-    @Query('coffeeId2') coffeeId2: number,
-    @Query('coffeeId3') coffeeId3: number,
-    @Query('coffeeId4') coffeeId4: number,
-    @Query('coffeeId5') coffeeId5: number,
-    @Query('coffeeId6') coffeeId6: number,
-    @Query('coffeeId7') coffeeId7: number,
-    @Query('coffeeId8') coffeeId8: number,
-    @Query('coffeeId9') coffeeId9: number,
-    @Query('coffeeId10') coffeeId10: number,
-  ): Promise<Likes[]> {
-    return this.likesService.getCoffeeIdLikes(
-      coffeeId1,
-      coffeeId2,
-      coffeeId3,
-      coffeeId4,
-      coffeeId5,
-      coffeeId6,
-      coffeeId7,
-      coffeeId8,
-      coffeeId9,
-      coffeeId10,
-    );
-  }
-
-  @UseGuards(AuthGuard('jwt'))
-  @Get('/login')
-  getLoginLikes(
-    @Req() req: Request,
-    @Query('skipPage') skipPage: number,
-    @Query('takePage') takePage: number,
-  ): Promise<Likes[]> {
-    return this.likesService.getLoginLikes(req.user.id, skipPage, takePage);
-  }
-
   @UseGuards(AuthGuard('jwt'))
   @Post()
   createLike(@Req() req: Request, @Body() dto: CreateLikeDto): Promise<Likes> {

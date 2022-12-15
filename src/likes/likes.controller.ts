@@ -11,7 +11,6 @@ import {
   Delete,
   Param,
   ParseIntPipe,
-  Query,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Likes } from '@prisma/client';

@@ -129,7 +129,7 @@ export class CoffeeService {
       AND price = ${priceJson}
       AND place = ${placeJson}
       GROUP BY "Coffee"."id", "User"."name", "User"."image"
-      ORDER BY abs(bitter - ${bitterJson})
+      ORDER BY abs(bitter - ${bitterJson}), abs(acidity - ${acidityJson})
       LIMIT 3
     `;
 
@@ -145,7 +145,7 @@ export class CoffeeService {
       AND price = ${priceJson}
       AND place = ${placeJson}
       GROUP BY "Coffee"."id", "User"."name", "User"."image"
-      ORDER BY abs(acidity - ${acidityJson})
+      ORDER BY abs(acidity - ${acidityJson}), abs(bitter - ${bitterJson})
       LIMIT 3
     `;
 
@@ -161,13 +161,18 @@ export class CoffeeService {
   getLikeRankingCoffees(): Promise<Coffee[]> {
     return this.prisma.coffee.findMany({
       include: {
-        _count: {
-          select: { likes: true },
-        },
         user: {
           select: {
             name: true,
             image: true,
+            _count: {
+              select: { coffee: true, likes: true },
+            },
+          },
+        },
+        likes: {
+          select: {
+            userId: true,
           },
         },
       },

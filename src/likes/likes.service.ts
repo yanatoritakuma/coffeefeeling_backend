@@ -16,27 +16,36 @@ export class LikesService {
     });
   }
 
-  // ログインしているユーザーのいいね取得
-  getLoginLikes(userId: number): Promise<Likes[]> {
-    return this.prisma.likes.findMany({
-      where: {
-        userId,
-      },
-      orderBy: {
-        createdAt: 'desc',
-      },
-    });
-  }
-
   // いいね作成
   async createLike(userId: number, dto: CreateLikeDto): Promise<Likes> {
-    const like = await this.prisma.likes.create({
-      data: {
-        userId,
-        ...dto,
+    const likeCoffee = await this.prisma.coffee.findFirst({
+      where: {
+        id: dto.coffeeId,
+      },
+      include: {
+        likes: {
+          select: {
+            userId: true,
+          },
+        },
       },
     });
-    return like;
+
+    const likedCoffeeIds = likeCoffee.likes.filter((user) => {
+      return user.userId === userId;
+    });
+
+    if (likedCoffeeIds.length >= 1) {
+      throw new ForbiddenException('いいね済み');
+    } else {
+      const like = await this.prisma.likes.create({
+        data: {
+          userId,
+          ...dto,
+        },
+      });
+      return like;
+    }
   }
 
   // いいね削除

@@ -32,7 +32,11 @@ export class CoffeeService {
   }
 
   // 特定のユーザーが投稿したデータ取得
-  getCoffeeByUserId(userId: number): Promise<Coffee[]> {
+  getCoffeeByUserId(
+    userId: number,
+    skipPage: number,
+    takePage: number,
+  ): Promise<Coffee[]> {
     return this.prisma.coffee.findMany({
       where: {
         userId,
@@ -42,12 +46,60 @@ export class CoffeeService {
           select: {
             name: true,
             image: true,
+            _count: {
+              select: { coffee: true, likes: true },
+            },
+          },
+        },
+        likes: {
+          select: {
+            userId: true,
           },
         },
       },
       orderBy: {
         createdAt: 'desc',
       },
+      skip: Number(skipPage),
+      take: Number(takePage),
+    });
+  }
+
+  // 特定のユーザーがいいねしたコーヒー取得
+  getCoffeeByLikeUserId(
+    userId: number,
+    skipPage: number,
+    takePage: number,
+  ): Promise<Coffee[]> {
+    return this.prisma.coffee.findMany({
+      where: {
+        likes: {
+          some: {
+            userId: userId,
+          },
+        },
+      },
+      include: {
+        user: {
+          select: {
+            name: true,
+            image: true,
+            _count: {
+              select: { coffee: true, likes: true },
+            },
+          },
+        },
+        likes: {
+          select: {
+            userId: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      skip: Number(skipPage),
+      take: Number(takePage),
     });
   }
 
@@ -77,7 +129,7 @@ export class CoffeeService {
       AND price = ${priceJson}
       AND place = ${placeJson}
       GROUP BY "Coffee"."id", "User"."name", "User"."image"
-      ORDER BY abs(bitter - ${bitterJson})
+      ORDER BY abs(bitter - ${bitterJson}), abs(acidity - ${acidityJson})
       LIMIT 3
     `;
 
@@ -93,7 +145,7 @@ export class CoffeeService {
       AND price = ${priceJson}
       AND place = ${placeJson}
       GROUP BY "Coffee"."id", "User"."name", "User"."image"
-      ORDER BY abs(acidity - ${acidityJson})
+      ORDER BY abs(acidity - ${acidityJson}), abs(bitter - ${bitterJson})
       LIMIT 3
     `;
 
@@ -103,6 +155,34 @@ export class CoffeeService {
     };
 
     return bestCoffee;
+  }
+
+  // いいねTOP10のコーヒ取得
+  getLikeRankingCoffees(): Promise<Coffee[]> {
+    return this.prisma.coffee.findMany({
+      include: {
+        user: {
+          select: {
+            name: true,
+            image: true,
+            _count: {
+              select: { coffee: true, likes: true },
+            },
+          },
+        },
+        likes: {
+          select: {
+            userId: true,
+          },
+        },
+      },
+      orderBy: {
+        likes: {
+          _count: 'desc',
+        },
+      },
+      take: 10,
+    });
   }
 
   async createCoffee(userId: number, dto: CreateCoffeeDto): Promise<Coffee> {
@@ -136,6 +216,17 @@ export class CoffeeService {
     return this.prisma.coffee.update({
       where: {
         id: coffeeId,
+      },
+      include: {
+        user: {
+          select: {
+            name: true,
+            image: true,
+            _count: {
+              select: { coffee: true },
+            },
+          },
+        },
       },
       data: {
         ...dto,

@@ -32,8 +32,30 @@ export class CoffeeController {
 
   @UseGuards(AuthGuard('jwt'))
   @Get('/userId')
-  getCoffeeByUserId(@Req() req: Request): Promise<Coffee[]> {
-    return this.coffeeService.getCoffeeByUserId(req.user.id);
+  getCoffeeByUserId(
+    @Req() req: Request,
+    @Query('skipPage') skipPage: number,
+    @Query('takePage') takePage: number,
+  ): Promise<Coffee[]> {
+    return this.coffeeService.getCoffeeByUserId(
+      req.user.id,
+      skipPage,
+      takePage,
+    );
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get('/likeUserId')
+  getCoffeeByLikeUserId(
+    @Req() req: Request,
+    @Query('skipPage') skipPage: number,
+    @Query('takePage') takePage: number,
+  ): Promise<Coffee[]> {
+    return this.coffeeService.getCoffeeByLikeUserId(
+      req.user.id,
+      skipPage,
+      takePage,
+    );
   }
 
   @Get('/feeling')
@@ -51,6 +73,11 @@ export class CoffeeController {
       price,
       place,
     );
+  }
+
+  @Get('/likeRankingCoffees')
+  getLikeRankingCoffees(): Promise<Coffee[]> {
+    return this.coffeeService.getLikeRankingCoffees();
   }
 
   @UseGuards(AuthGuard('jwt'))

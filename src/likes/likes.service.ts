@@ -16,6 +16,18 @@ export class LikesService {
     });
   }
 
+  // 特定ユーザー（ログイン）のいいね数取得
+  getUserByIdLikes(userId: number): Promise<Likes[]> {
+    return this.prisma.likes.findMany({
+      where: {
+        userId,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+  }
+
   // いいね作成
   async createLike(userId: number, dto: CreateLikeDto): Promise<Likes> {
     const likeCoffee = await this.prisma.coffee.findFirst({

@@ -27,6 +27,12 @@ export class LikesController {
   }
 
   @UseGuards(AuthGuard('jwt'))
+  @Get('/userLiked')
+  getUserByIdLikes(@Req() req: Request): Promise<Likes[]> {
+    return this.likesService.getUserByIdLikes(req.user.id);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
   @Post()
   createLike(@Req() req: Request, @Body() dto: CreateLikeDto): Promise<Likes> {
     return this.likesService.createLike(req.user.id, dto);

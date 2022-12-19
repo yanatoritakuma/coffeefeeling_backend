@@ -32,7 +32,9 @@ export class AuthService {
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
         if (error.code === 'P2002') {
-          throw new ForbiddenException('This email is already taken');
+          throw new ForbiddenException(
+            'このメールアドレスは既に使用されています',
+          );
         }
       }
       throw error;

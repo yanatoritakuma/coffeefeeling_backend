@@ -32,7 +32,9 @@ export class AuthService {
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
         if (error.code === 'P2002') {
-          throw new ForbiddenException('This email is already taken');
+          throw new ForbiddenException(
+            'このメールアドレスは既に使用されています',
+          );
         }
       }
       throw error;
@@ -46,10 +48,16 @@ export class AuthService {
       },
     });
 
-    if (!user) throw new ForbiddenException('Email or password incorrect');
+    if (!user)
+      throw new ForbiddenException(
+        'メールアドレスまたは、パスワードが正しくありません。',
+      );
     // パスワードがDBに存在するのか
     const isValid = await bcrypt.compare(dto.password, user.hashedPassword);
-    if (!isValid) throw new ForbiddenException('Email or password incorrect');
+    if (!isValid)
+      throw new ForbiddenException(
+        'メールアドレスまたは、パスワードが正しくありません。',
+      );
     return this.generateJwt(user.id, user.email);
   }
 

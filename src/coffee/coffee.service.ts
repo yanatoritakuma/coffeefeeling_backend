@@ -185,6 +185,7 @@ export class CoffeeService {
     });
   }
 
+  // コーヒー新規投稿
   async createCoffee(userId: number, dto: CreateCoffeeDto): Promise<Coffee> {
     const coffee = await this.prisma.coffee.create({
       data: {
@@ -195,6 +196,7 @@ export class CoffeeService {
     return coffee;
   }
 
+  // コーヒーの更新
   async updateCoffeeById(
     userId: number,
     userAdmin: boolean,
@@ -227,6 +229,11 @@ export class CoffeeService {
             },
           },
         },
+        likes: {
+          select: {
+            userId: true,
+          },
+        },
       },
       data: {
         ...dto,
@@ -234,6 +241,7 @@ export class CoffeeService {
     });
   }
 
+  // コーヒー削除
   async deleteCoffeeById(
     userId: number,
     coffeeId: number,

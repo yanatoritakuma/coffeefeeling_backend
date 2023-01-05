@@ -80,6 +80,16 @@ export class CoffeeController {
     return this.coffeeService.getLikeRankingCoffees();
   }
 
+  @Get('/searchCoffee')
+  getSearchCoffee(
+    @Query('name') name: string,
+    @Query('category') category: string,
+    @Query('price') price: string,
+    @Query('place') place: string,
+  ): Promise<Coffee[]> {
+    return this.coffeeService.getSearchCoffee(name, category, price, place);
+  }
+
   @UseGuards(AuthGuard('jwt'))
   @Post()
   createCoffee(

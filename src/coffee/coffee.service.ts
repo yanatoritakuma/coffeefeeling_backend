@@ -185,6 +185,104 @@ export class CoffeeService {
     });
   }
 
+  // 検索結果のコーヒー取得
+  getSearchCoffee(
+    name: string,
+    category: string,
+    price: string,
+    place: string,
+  ): Promise<Coffee[]> {
+    const nameJson = JSON.parse(String(name));
+    const categoryJson = JSON.parse(String(category));
+    const priceJson = JSON.parse(String(price));
+    const placeJson = JSON.parse(String(place));
+
+    // 全て指定された検索
+    const allSearch = this.prisma.coffee.findMany({
+      where: {
+        name: {
+          startsWith: nameJson,
+        },
+        category: {
+          search:
+            categoryJson !== '指定なし'
+              ? categoryJson
+              : 'ブラック | カフェラテ | エスプレッソ | カフェモカ | カフェオレ | カプチーノ',
+        },
+        price:
+          priceJson !== '指定なし'
+            ? Number(priceJson)
+            : { in: [100, 300, 500, 700, 1000] },
+        place: {
+          search: placeJson !== '指定なし' ? placeJson : '店舗 | コンビニ',
+        },
+      },
+      include: {
+        user: {
+          select: {
+            name: true,
+            image: true,
+            _count: {
+              select: { coffee: true, likes: true },
+            },
+          },
+        },
+        likes: {
+          select: {
+            userId: true,
+          },
+        },
+      },
+      orderBy: {
+        likes: {
+          _count: 'desc',
+        },
+      },
+    });
+
+    // 名前以外していされた検索
+    const noneNameSearch = this.prisma.coffee.findMany({
+      where: {
+        category: {
+          search:
+            categoryJson !== '指定なし'
+              ? categoryJson
+              : 'ブラック | カフェラテ | エスプレッソ | カフェモカ | カフェオレ | カプチーノ',
+        },
+        price:
+          priceJson !== '指定なし'
+            ? Number(priceJson)
+            : { in: [100, 300, 500, 700, 1000] },
+        place: {
+          search: placeJson !== '指定なし' ? placeJson : '店舗 | コンビニ',
+        },
+      },
+      include: {
+        user: {
+          select: {
+            name: true,
+            image: true,
+            _count: {
+              select: { coffee: true, likes: true },
+            },
+          },
+        },
+        likes: {
+          select: {
+            userId: true,
+          },
+        },
+      },
+      orderBy: {
+        likes: {
+          _count: 'desc',
+        },
+      },
+    });
+
+    return nameJson !== '' ? allSearch : noneNameSearch;
+  }
+
   // コーヒー新規投稿
   async createCoffee(userId: number, dto: CreateCoffeeDto): Promise<Coffee> {
     const coffee = await this.prisma.coffee.create({

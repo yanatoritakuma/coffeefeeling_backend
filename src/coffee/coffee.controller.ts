@@ -86,8 +86,6 @@ export class CoffeeController {
     @Query('category') category: string,
     @Query('price') price: string,
     @Query('place') place: string,
-    // @Query('skipPage') skipPage: number,
-    // @Query('takePage') takePage: number,
   ): Promise<Coffee[]> {
     return this.coffeeService.getSearchCoffee(name, category, price, place);
   }

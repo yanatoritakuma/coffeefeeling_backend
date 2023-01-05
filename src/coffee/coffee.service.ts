@@ -201,7 +201,7 @@ export class CoffeeService {
     const allSearch = this.prisma.coffee.findMany({
       where: {
         name: {
-          search: nameJson,
+          startsWith: nameJson,
         },
         category: {
           search:
@@ -238,8 +238,6 @@ export class CoffeeService {
           _count: 'desc',
         },
       },
-      // skip: Number(skipPage),
-      // take: Number(takePage),
     });
 
     // 名前以外していされた検索
@@ -280,8 +278,6 @@ export class CoffeeService {
           _count: 'desc',
         },
       },
-      // skip: Number(skipPage),
-      // take: Number(takePage),
     });
 
     return nameJson !== '' ? allSearch : noneNameSearch;

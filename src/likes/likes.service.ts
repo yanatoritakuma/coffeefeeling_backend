@@ -30,25 +30,26 @@ export class LikesService {
 
   // いいね作成
   async createLike(userId: number, dto: CreateLikeDto): Promise<Likes> {
-    const likeCoffee = await this.prisma.coffee.findFirst({
+    const likes = await this.prisma.likes.findMany({
       where: {
-        id: dto.coffeeId,
-      },
-      include: {
-        likes: {
-          select: {
-            userId: true,
-          },
-        },
+        coffeeId: dto.coffeeId,
       },
     });
 
-    const likedCoffeeIds = likeCoffee.likes.filter((user) => {
-      return user.userId === userId;
+    const liked = likes.filter((like) => {
+      return like.userId === userId;
     });
 
-    if (likedCoffeeIds.length >= 1) {
-      throw new ForbiddenException('いいね済み');
+    const likeCoffeeId = liked[0];
+
+    // 連続でいいねクリックされるとバグるので阻止
+    if (likeCoffeeId !== undefined) {
+      console.log('連続', likeCoffeeId);
+      return;
+    }
+
+    if (liked.length !== 0) {
+      throw new ForbiddenException('User can only like 1 post');
     } else {
       const like = await this.prisma.likes.create({
         data: {
@@ -69,8 +70,9 @@ export class LikesService {
       },
     });
 
-    if (!like || like[0].userId !== userId)
+    if (like[0].userId !== userId) {
       throw new ForbiddenException('No permision to delete');
+    }
 
     await this.prisma.likes.delete({
       where: {

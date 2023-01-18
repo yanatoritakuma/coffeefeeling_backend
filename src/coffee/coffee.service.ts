@@ -234,9 +234,7 @@ export class CoffeeService {
         },
       },
       orderBy: {
-        likes: {
-          _count: 'desc',
-        },
+        createdAt: 'desc',
       },
     });
 
@@ -274,9 +272,7 @@ export class CoffeeService {
         },
       },
       orderBy: {
-        likes: {
-          _count: 'desc',
-        },
+        createdAt: 'desc',
       },
     });
 

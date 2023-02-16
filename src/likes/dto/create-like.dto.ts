@@ -1,6 +1,6 @@
-import { IsOptional } from 'class-validator';
+import { IsInt } from 'class-validator';
 
 export class CreateLikeDto {
-  @IsOptional()
+  @IsInt()
   coffeeId: number;
 }

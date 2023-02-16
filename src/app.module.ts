@@ -7,6 +7,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { CoffeeModule } from './coffee/coffee.module';
 import { ConfigModule } from '@nestjs/config';
 import { LikesModule } from './likes/likes.module';
+import { CommentsModule } from './comments/comments.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { LikesModule } from './likes/likes.module';
     PrismaModule,
     CoffeeModule,
     LikesModule,
+    CommentsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

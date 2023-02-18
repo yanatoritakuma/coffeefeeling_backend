@@ -11,7 +11,18 @@ export class CommentsService {
   getTargetComments(coffeeId: number): Promise<Comments[]> {
     return this.prisma.comments.findMany({
       where: {
-        coffeeId: coffeeId,
+        coffeeId: Number(coffeeId),
+      },
+      include: {
+        user: {
+          select: {
+            name: true,
+            image: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
       },
     });
   }

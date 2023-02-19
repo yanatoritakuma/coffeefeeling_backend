@@ -1,7 +1,12 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  ParseIntPipe,
   Post,
   Query,
   Req,
@@ -29,5 +34,15 @@ export class CommentsController {
     @Body() dto: CreateCommentDto,
   ): Promise<Comments> {
     return this.commentsService.createComment(req.user.id, dto);
+  }
+
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @UseGuards(AuthGuard('jwt'))
+  @Delete(':id')
+  deleteCommentById(
+    @Req() req: Request,
+    @Param('id', ParseIntPipe) commentId: number,
+  ): Promise<void> {
+    return this.commentsService.deleteCommentById(req.user.id, commentId);
   }
 }

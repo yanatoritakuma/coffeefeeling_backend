@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { Comments } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
@@ -16,6 +16,7 @@ export class CommentsService {
       include: {
         user: {
           select: {
+            id: true,
             name: true,
             image: true,
           },
@@ -40,5 +41,24 @@ export class CommentsService {
     });
 
     return comments;
+  }
+
+  // コメント削除
+  async deleteCommentById(useId: number, commentId: number): Promise<void> {
+    const comment = await this.prisma.comments.findUnique({
+      where: {
+        id: commentId,
+      },
+    });
+
+    if (!comment || comment.userId !== useId) {
+      throw new ForbiddenException('No permision to delete');
+    }
+
+    await this.prisma.comments.delete({
+      where: {
+        id: commentId,
+      },
+    });
   }
 }
